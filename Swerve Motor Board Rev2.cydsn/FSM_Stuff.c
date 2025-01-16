@@ -38,6 +38,39 @@ int SetMode(int motor, int new_mode) {
     return 0;
 }
 
+    for (int i = 0; i < 4; i++)
+        if (motor(i) == 1) 
+    /* case (motor(1))
+            motor(1) == 0: turn off
+            motro(1) == 1: turn on
+        
+        
+        case (motor(2))
+    
+            motor(2) == 0: turn off
+            motro(2) == 1: turn on
+        
+        
+        
+        switch(currentState)
+        currentState = off
+            case off:
+            motor off;
+            
+        
+            case on: 
+            if (motor(0) == 1)
+                motor on
+                currentstate = on;
+                if (currentState = on && motor(0) = 0)
+                currentState = off;
+        
+        
+        
+       if currentState = on && 
+    */
+
+
 int GetMode(int motor) {
     if (motor == MOTOR1) return mode1;
     if (motor == MOTOR2) return mode2;

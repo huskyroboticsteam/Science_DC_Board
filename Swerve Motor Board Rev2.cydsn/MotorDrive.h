@@ -15,8 +15,11 @@
 #include <project.h>
 #include <stdint.h>
 
-#define MOTOR1 0b01
-#define MOTOR2 0b10
+#define MOTOR1 0b00001
+#define MOTOR2 0b00010
+#define MOTOR3 0b00100
+#define MOTOR4 0b01000
+#define MOTOR5 0b10000
 #define MOTOR_BOTH 0b11
 
 #define FORWARD 1

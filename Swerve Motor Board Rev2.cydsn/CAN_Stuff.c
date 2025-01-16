@@ -54,6 +54,12 @@ int ProcessCAN(CANPacket* receivedPacket, CANPacket* packetToSend) {
     int err = 0;
     int motor = 0;
     
+    
+    //         0x000000   0x000010 0x000001  & 0000100 
+    // drive = motor_set & ( Motor1 | motor2 | motor3 | motor 4| motor 5)
+    // if ()
+    // if ()
+    
     if (motor_address == address1) motor = MOTOR1;
     else if (motor_address == address2) motor = MOTOR2;
     else motor = MOTOR_BOTH; // assume broadcast

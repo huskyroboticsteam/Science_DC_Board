@@ -20,9 +20,16 @@
 
 uint8  PWM1_enable = 0;
 uint8  PWM2_enable = 0;
+uint8  PWM3_enable = 0;
+uint8  PWM4_enable = 0;
+uint8  PWM5_enable = 0;
 
 int32 PWM1_value = 0;
 int32 PWM2_value = 0;
+int32 PWM3_value = 0;
+int32 PWM4_value = 0;
+int32 PWM5_value = 0;
+
 
 volatile uint8  PWM1_invalidate = 0;
 volatile uint8  PWM2_invalidate = 0;
@@ -51,6 +58,16 @@ int StartPWM(int motor) {
     if (motor & MOTOR2) {
         PWM2_enable = 1;
     }
+    if (motor & MOTOR3) {
+        PWM3_enable = 1;
+    }
+    if (motor & MOTOR4) {
+        PWM4_enable = 1;
+    }
+    if (motor & MOTOR5) {
+        PWM5_enable = 1;
+    }
+    
     return 0;
 }
 
@@ -62,6 +79,18 @@ void StopPWM(int motor) {
     if (motor & MOTOR2) {
         PWM_Motor2_WriteCompare(0);
         PWM2_enable = 0;
+    }
+    if (motor & MOTOR3) {
+        PWM_Motor2_WriteCompare(0);
+        PWM3_enable = 0;
+    }
+    if (motor & MOTOR4) {
+        PWM_Motor2_WriteCompare(0);
+        PWM4_enable = 0;
+    }
+    if (motor & MOTOR5) {
+        PWM_Motor2_WriteCompare(0);
+        PWM5_enable = 0;
     }
 }
 
@@ -98,23 +127,90 @@ int SetPWM(int motor, int16 pwm) {
             
             if (pwm < 0) {
                 Pin_Motor2_Dir_Write(BACKWARD);
-                // if (pot_value <= 0) {
-                //     err = ERROR_LIMIT;
-                //     pwm = 0;
-                // }
+                if (pot_value <= 0) {
+                    err = ERROR_LIMIT;
+                    pwm = 0;
+                }
             } else if (pwm > 0) {
                 Pin_Motor2_Dir_Write(FORWARD);
-                // if (pot_value >= 4095) {
-                //     err = ERROR_LIMIT;
-                //     pwm = 0;
-                // }
+                if (pot_value >= 4095) {
+                    err = ERROR_LIMIT;
+                    pwm = 0;
+                }
             }
             
             PWM2_value = pwm;
             PWM_Motor2_WriteCompare(abs(pwm));
+
         } else err = ERROR_PWM_NOT_ENABLED;
     }
-    
+    if (motor & MOTOR3) {
+        if (PWM3_enable) {
+            PWM3_invalidate = 0;
+            
+            if (pwm < 0) {
+                Pin_Motor3_Dir_Write(BACKWARD);
+                if (pot_value <= 0) {
+                    err = ERROR_LIMIT;
+                    pwm = 0;
+                }
+            } else if (pwm > 0) {
+                Pin_Motor3_Dir_Write(FORWARD);
+                if (pot_value >= 4095) {
+                    err = ERROR_LIMIT;
+                    pwm = 0;
+                }
+            }
+            
+            PWM3_value = pwm;
+            PWM_Motor3_WriteCompare(abs(pwm));
+        } else err = ERROR_PWM_NOT_ENABLED;        
+    }
+    if (motor & MOTOR4) {
+        if (PWM4_enable) {
+            PWM4_invalidate = 0;
+            
+            if (pwm < 0) {
+                Pin_Motor4_Dir_Write(BACKWARD);
+                if (pot_value <= 0) {
+                    err = ERROR_LIMIT;
+                    pwm = 0;
+                }
+            } else if (pwm > 0) {
+                Pin_Motor4_Dir_Write(FORWARD);
+                if (pot_value >= 4095) {
+                    err = ERROR_LIMIT;
+                    pwm = 0;
+                }
+            }
+            
+            PWM4_value = pwm;
+            PWM_Motor4_WriteCompare(abs(pwm));
+
+        } else err = ERROR_PWM_NOT_ENABLED;
+    }
+    if (motor & MOTOR5) {
+        if (PWM5_enable) {
+            PWM5_invalidate = 0;
+            
+            if (pwm < 0) {
+                Pin_Motor5_Dir_Write(BACKWARD);
+                if (pot_value <= 0) {
+                    err = ERROR_LIMIT;
+                    pwm = 0;
+                }
+            } else if (pwm > 0) {
+                Pin_Motor5_Dir_Write(FORWARD);
+                if (pot_value >= 4095) {
+                    err = ERROR_LIMIT;
+                    pwm = 0;
+                }
+            }
+            
+            PWM5_value = pwm;
+            PWM_Motor5_WriteCompare(abs(pwm));
+        } else err = ERROR_PWM_NOT_ENABLED;
+    }
     return err;
 }
 
