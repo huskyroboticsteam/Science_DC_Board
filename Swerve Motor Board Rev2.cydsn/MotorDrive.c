@@ -33,14 +33,23 @@ int32 PWM5_value = 0;
 
 volatile uint8  PWM1_invalidate = 0;
 volatile uint8  PWM2_invalidate = 0;
+volatile uint8  PWM3_invalidate = 0;
+volatile uint8  PWM4_invalidate = 0;
+volatile uint8  PWM5_invalidate = 0;
 
 volatile int32 position1 = 0;
 volatile int32 position2 = 0;
+volatile int32 position3 = 0;
+volatile int32 position4 = 0;
+volatile int32 position5 = 0;
 volatile int32 enc_value = 0;
 volatile int32 pot_value = 0;
 
 Conversion conv1 = {};
 Conversion conv2 = {};
+Conversion conv3 = {};
+Conversion conv4 = {};
+Conversion conv5 = {};
 
 uint8 enc_dir = FORWARD;
 
@@ -227,12 +236,33 @@ int UpdateConversion(int motor) {
             conv2.ratio_set = 1;
         } else return 1;
     }
+    if (motor & MOTOR3) {
+        if (conv3.min_set && conv3.max_set && conv3.mDegMax != conv3.mDegMin) {
+            conv3.ratio = (double) (conv3.mDegMax-conv3.mDegMin)/(conv3.tickMax-conv3.tickMin);
+            conv3.ratio_set = 1;
+        } else return 1;
+    }
+    if (motor & MOTOR4) {
+        if (conv4.min_set && conv4.max_set && conv4.mDegMax != conv4.mDegMin) {
+            conv4.ratio = (double) (conv4.mDegMax-conv4.mDegMin)/(conv4.tickMax-conv4.tickMin);
+            conv4.ratio_set = 1;
+        } else return 1;
+    }
+    if (motor & MOTOR5) {
+        if (conv5.min_set && conv5.max_set && conv5.mDegMax != conv5.mDegMin) {
+            conv5.ratio = (double) (conv5.mDegMax-conv5.mDegMin)/(conv5.tickMax-conv5.tickMin);
+            conv5.ratio_set = 1;
+        } else return 1;
+    }
     return 0;
 }
 
 Conversion GetConversion(int motor) {
     if (motor == MOTOR1) return conv1;
     if (motor == MOTOR2) return conv2;
+    if (motor == MOTOR3) return conv3;
+    if (motor == MOTOR4) return conv4;
+    if (motor == MOTOR5) return conv5;
     return (Conversion) {};
 }
 
@@ -244,6 +274,18 @@ void SetConvRatio(int motor, float ratio) {
     if (motor & MOTOR2) {
         conv2.ratio = ratio;
         conv2.ratio_set = 1;
+    }
+    if (motor & MOTOR3) {
+        conv3.ratio = ratio;
+        conv3.ratio_set = 1;
+    }
+    if (motor & MOTOR4) {
+        conv4.ratio = ratio;
+        conv4.ratio_set = 1;
+    }
+    if (motor & MOTOR5) {
+        conv5.ratio = ratio;
+        conv5.ratio_set = 1;
     }
 }
 
@@ -258,6 +300,21 @@ int SetConvMin(int motor, int32 tickMin, int32 mDegMin) {
         conv2.mDegMin = mDegMin;
         conv2.min_set = 1;
     }
+    if (motor & MOTOR3) {
+        conv3.tickMin = tickMin;
+        conv3.mDegMin = mDegMin;
+        conv3.min_set = 1;
+    }
+    if (motor & MOTOR4) {
+        conv4.tickMin = tickMin;
+        conv4.mDegMin = mDegMin;
+        conv4.min_set = 1;
+    }
+    if (motor & MOTOR5) {
+        conv5.tickMin = tickMin;
+        conv5.mDegMin = mDegMin;
+        conv5.min_set = 1;
+    }
     return UpdateConversion(motor);
 }
 
@@ -271,6 +328,21 @@ void SetConvMax(int motor, int32 tickMax, int32 mDegMax) {
         conv2.tickMax = tickMax;
         conv2.mDegMax = mDegMax;
         conv2.max_set = 1;
+    }
+    if (motor & MOTOR3) {
+        conv3.tickMax = tickMax;
+        conv3.mDegMax = mDegMax;
+        conv3.max_set = 1;
+    }
+    if (motor & MOTOR4) {
+        conv4.tickMax = tickMax;
+        conv4.mDegMax = mDegMax;
+        conv4.max_set = 1;
+    }
+    if (motor & MOTOR5) {
+        conv5.tickMax = tickMax;
+        conv5.mDegMax = mDegMax;
+        conv5.max_set = 1;
     }
     UpdateConversion(motor);
 }
@@ -310,11 +382,17 @@ int32 GetEncValue() { return enc_value; }
 int32 GetPosition(int motor) {
     if (motor == MOTOR1) return position1;
     if (motor == MOTOR2) return position2;
+    if (motor == MOTOR3) return position3;
+    if (motor == MOTOR4) return position4;
+    if (motor == MOTOR5) return position5;
     return 0;
 }
 int32 GetCurrentPWM(int motor) {
     if (motor == MOTOR1) return PWM1_value;
     if (motor == MOTOR2) return PWM2_value;
+    if (motor == MOTOR3) return PWM3_value;
+    if (motor == MOTOR4) return PWM4_value;
+    if (motor == MOTOR5) return PWM5_value;
     return 0;
 }
 
@@ -326,6 +404,18 @@ void UpdatePosition(int motor) {
     if (motor & MOTOR2) {
         if (conv2.ratio_set)
             position2 = (pot_value-conv2.tickMin) * conv2.ratio + conv2.mDegMin;
+    }
+    if (motor & MOTOR3) {
+        if (conv3.ratio_set)
+            position3 = (pot_value-conv3.tickMin) * conv3.ratio + conv3.mDegMin;
+    }
+    if (motor & MOTOR4) {
+        if (conv4.ratio_set)
+            position4 = (pot_value-conv4.tickMin) * conv4.ratio + conv4.mDegMin;
+    }
+    if (motor & MOTOR5) {
+        if (conv5.ratio_set)
+            position5 = (pot_value-conv5.tickMin) * conv5.ratio + conv5.mDegMin;
     }
 }
 
@@ -363,6 +453,15 @@ CY_ISR(Drive_Handler) {
     
     if (PWM2_invalidate == 20) SetPWM(MOTOR2, 0);
     else PWM2_invalidate++;
+    
+    if (PWM3_invalidate == 20) SetPWM(MOTOR3, 0);
+    else PWM1_invalidate++;
+    
+    if (PWM4_invalidate == 20) SetPWM(MOTOR4, 0);
+    else PWM4_invalidate++;
+    
+    if (PWM5_invalidate == 20) SetPWM(MOTOR5, 0);
+    else PWM5_invalidate++;
     
     UpdatePotValue();
     UpdateEncValue();

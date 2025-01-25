@@ -28,12 +28,15 @@ void StartCAN(uint8 addy1, uint8 addy2) {
         address2 = DEVICE_SERIAL_TELEM_LOCALIZATION;
     } else address2 = addy2;
     
-    InitCAN(0x04, (int) address1, (int) address2);
+    InitCAN(0x04, (int) address1, (int) address2, (int) address3,(int) address4,(int) address5);
 }
 
 uint8 GetAddress(int motor) {
     if (motor == MOTOR1) return address1;
     if (motor == MOTOR2) return address2;
+    if (motor == MOTOR3) return address3;
+    if (motor == MOTOR4) return address4;
+    if (motor == MOTOR5) return address5;
     return 0;
 }
 
@@ -60,8 +63,12 @@ int ProcessCAN(CANPacket* receivedPacket, CANPacket* packetToSend) {
     // if ()
     // if ()
     
+    MOTORS_TO_CHANGE = motor_adress
     if (motor_address == address1) motor = MOTOR1;
     else if (motor_address == address2) motor = MOTOR2;
+    else if (motor_address == address3) motor = MOTOR3;
+    else if (motor_address == address4) motor = MOTOR4;
+    else if (motor_address == address5) motor = MOTOR5;
     else motor = MOTOR_BOTH; // assume broadcast
     
     switch(packageID) {
