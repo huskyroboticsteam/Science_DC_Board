@@ -131,9 +131,9 @@ void DebugPrint(char input) {
             Print(txData);
             break;
         case 'k': 
-            ADC_StartConvert();
-            ADC_IsEndConversion(ADC_WAIT_FOR_RESULT);
-            PrintInt(ADC_GetResult16(0));
+            //ADC_StartConvert();
+            //ADC_IsEndConversion(ADC_WAIT_FOR_RESULT);
+            //PrintInt(ADC_GetResult16(0));
             // Print(" ");
             // PrintInt(ADC_GetResult16(1));
             // Print(" ");
