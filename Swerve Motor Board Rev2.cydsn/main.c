@@ -52,8 +52,8 @@ int main() {
             DebugPrint(DBG_UART_UartGetByte());
         }
         
-        LED_DBG1_Write(!LED_DBG1_Read()); // visualize main loop rate
-        LED_DBG2_Write(GetMode(MOTOR1) == MODE_UNINIT); // turn on when initialized
+        LED_DBG_Write(!LED_DBG_Read()); // visualize main loop rate
+        // LED_DBG_Write(GetMode(MOTOR1) == MODE_UNINIT); // turn on when initialized
         CyDelay(1);
     }
 }
@@ -64,9 +64,10 @@ void Initialize(void) {
     StartCAN(ReadDIP(), ReadDIP()+16);
     DBG_UART_Start();
     Timer_Periodic_Start();
-    Timer_PID_Start();
-    PWM_Motor1_Start();
-    PWM_Motor2_Start();
+    I2C_Start();
+    // Timer_PID_Start();
+    // PWM_Motor1_Start();
+    // PWM_Motor2_Start();
     // QuadDec_Enc_Start();
     ADC_Start();
     
@@ -190,7 +191,7 @@ void PrintCanPacket(CANPacket* packet) {
 
 void DisplayErrorCode(uint8 code) {    
     ERROR_time_LED = 0;
-    LED_ERR_Write(ON);
+    LED_DBG_Write(ON);
     
     sprintf(txData, "Error %X: ", code);
     Print(txData);
@@ -228,7 +229,7 @@ CY_ISR(LED_Handler) {
     ERROR_time_LED++;
     
     if (ERROR_time_LED >= 10)
-        LED_ERR_Write(OFF);
+        LED_DBG_Write(OFF);
     if (CAN_time_LED >= 2)
         LED_CAN_Write(OFF);
 }

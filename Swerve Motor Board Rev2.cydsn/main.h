@@ -33,6 +33,7 @@ void PrintCanPacket(CANPacket* packet);
 void DisplayErrorCode(uint8 code);
 int ReadDIP();
 
+
 CY_ISR(LED_Handler);
 
 /* [] END OF FILE */

@@ -465,7 +465,7 @@ CY_ISR(Drive_Handler) {
     
     UpdatePotValue();
     UpdateEncValue();
-    UpdatePosition(MOTOR_BOTH);
+    UpdatePosition(MOTOR_ALL);
 }
 
 /* [] END OF FILE */

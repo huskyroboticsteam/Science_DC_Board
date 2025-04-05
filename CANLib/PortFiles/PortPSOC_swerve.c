@@ -36,10 +36,13 @@ CY_ISR_PROTO(CAN_FLAG_ISR);
 
 int deviceAddress1;
 int deviceAddress2;
+int deviceAddress3;
+int deviceAddress4;
+int deviceAddress5;
 int deviceGroup;
 CAN_RX_CFG rxMailbox;
 //Added two device addresses instead of 1 for simultaneous control of the two swerve motors
-void InitCAN(int deviceGroupInput, int address1, int address2) {
+void InitCAN(int deviceGroupInput, int address1, int address2, int address3, int address4, int address5) {
     CAN_Start(); //must name CAN Top Design block as "CAN"
     
     deviceGroup = deviceGroupInput & 0xF; //4bits of ID

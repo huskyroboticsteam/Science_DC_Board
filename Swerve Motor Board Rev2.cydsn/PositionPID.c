@@ -18,10 +18,16 @@
 
 PID_Config PID1 = {.maxIntegral=500, .maxPWM=1023};
 PID_Config PID2 = {.maxIntegral=500, .maxPWM=1023};
+PID_Config PID3 = {.maxIntegral=500, .maxPWM=1023};
+PID_Config PID4 = {.maxIntegral=500, .maxPWM=1023};
+PID_Config PID5 = {.maxIntegral=500, .maxPWM=1023};
 volatile PID_State PID1_state = {};
 volatile PID_State PID2_state = {};
+volatile PID_State PID3_state = {};
+volatile PID_State PID4_state = {};
+volatile PID_State PID5_state = {};
 
-uint8 PID1_enable, PID2_enable;
+uint8 PID1_enable, PID2_enable, PID3_enable, PID4_enable, PID5_enable;
 
 int StartPID(int motor) {
     int err = 0;
@@ -37,6 +43,27 @@ int StartPID(int motor) {
             PID2_state.integral = 0;
             PID2_state.last_error = 0;
             PID2_enable = 1;
+        } else err = 1;
+    }
+    if (motor & MOTOR3) {
+        if (PID3.kP_set && PID3.kI_set && PID3.kD_set && GetConversion(MOTOR3).ratio_set) {
+            PID3_state.integral = 0;
+            PID3_state.last_error = 0;
+            PID3_enable = 1;
+        } else err = 1;
+    }
+    if (motor & MOTOR4) {
+        if (PID4.kP_set && PID4.kI_set && PID4.kD_set && GetConversion(MOTOR4).ratio_set) {
+            PID4_state.integral = 0;
+            PID4_state.last_error = 0;
+            PID4_enable = 1;
+        } else err = 1;
+    }
+    if (motor & MOTOR5) {
+        if (PID5.kP_set && PID5.kI_set && PID5.kD_set && GetConversion(MOTOR5).ratio_set) {
+            PID5_state.integral = 0;
+            PID5_state.last_error = 0;
+            PID5_enable = 1;
         } else err = 1;
     }
     return err;

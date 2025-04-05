@@ -20,7 +20,7 @@
 #define MOTOR3 0b00100
 #define MOTOR4 0b01000
 #define MOTOR5 0b10000
-#define MOTOR_BOTH 0b11
+#define MOTOR_ALL 0b11
 
 #define FORWARD 1
 #define BACKWARD 0

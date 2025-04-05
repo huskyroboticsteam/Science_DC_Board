@@ -18,7 +18,7 @@
 #include "MotorDrive.h"
 #include "../CANLib/CANLibrary.h"
 
-uint8 address1, address2;
+uint8 address1, address2, address3, address4, address5;
 
 void StartCAN(uint8 addy1, uint8 addy2) {
     if (addy1 == 0) {
@@ -45,7 +45,7 @@ int ProcessCAN(CANPacket* receivedPacket, CANPacket* packetToSend) {
     uint16 packageID = GetPacketID(receivedPacket);
     
     if (packageID == ID_ESTOP) {
-        SetMode(MOTOR_BOTH, MODE_UNINIT);
+        SetMode(MOTOR_ALL, MODE_UNINIT);
         return ERROR_ESTOP;
     }
     
@@ -63,13 +63,13 @@ int ProcessCAN(CANPacket* receivedPacket, CANPacket* packetToSend) {
     // if ()
     // if ()
     
-    MOTORS_TO_CHANGE = motor_adress
+    // MOTORS_TO_CHANGE = motor_address;
     if (motor_address == address1) motor = MOTOR1;
     else if (motor_address == address2) motor = MOTOR2;
     else if (motor_address == address3) motor = MOTOR3;
     else if (motor_address == address4) motor = MOTOR4;
     else if (motor_address == address5) motor = MOTOR5;
-    else motor = MOTOR_BOTH; // assume broadcast
+    else motor = MOTOR_ALL; // assume broadcast
     
     switch(packageID) {
         case(ID_MOTOR_UNIT_MODE_SEL):
@@ -189,6 +189,5 @@ int SendLimitAlert(uint8 status) {
     
     return SendCANPacket(&can_send);
 }
-
 
 /* [] END OF FILE */
