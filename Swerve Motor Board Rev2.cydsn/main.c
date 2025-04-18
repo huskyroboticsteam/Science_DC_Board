@@ -79,9 +79,11 @@ void Initialize(void) {
     isr_Drive_StartEx(Drive_Handler);
 }
 
+/*
 int ReadDIP() {
     return Status_Reg_DIP_Read() & 0x0F;
 }
+*/
 
 void DebugPrint(char input) {
     switch(input) {

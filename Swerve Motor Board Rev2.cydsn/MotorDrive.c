@@ -82,23 +82,23 @@ int StartPWM(int motor) {
 
 void StopPWM(int motor) {
     if (motor & MOTOR1) {
-        PWM_Motor1_WriteCompare(0);
+        setPWMFromDutyCycle(1, 0);
         PWM1_enable = 0;
     }
     if (motor & MOTOR2) {
-        PWM_Motor2_WriteCompare(0);
+        setPWMFromDutyCycle(2, 0);
         PWM2_enable = 0;
     }
     if (motor & MOTOR3) {
-        PWM_Motor2_WriteCompare(0);
+        setPWMFromDutyCycle(3, 0);
         PWM3_enable = 0;
     }
     if (motor & MOTOR4) {
-        PWM_Motor2_WriteCompare(0);
+        setPWMFromDutyCycle(4, 0);
         PWM4_enable = 0;
     }
     if (motor & MOTOR5) {
-        PWM_Motor2_WriteCompare(0);
+        setPWMFromDutyCycle(5, 0);
         PWM5_enable = 0;
     }
 }
@@ -113,13 +113,13 @@ int SetPWM(int motor, int16 pwm) {
             PWM1_invalidate = 0;
             
             if (pwm < 0) {
-                Pin_Motor1_Dir_Write(BACKWARD);
+                Dir_Motor1_Write(BACKWARD);
                 if (limit1) {
                     err = ERROR_LIMIT;
                     pwm = 0;
                 }
             } else if (pwm > 0) {
-                Pin_Motor1_Dir_Write(FORWARD);
+                Dir_Motor1_Write(FORWARD);
                 if (limit2) {
                     err = ERROR_LIMIT;
                     pwm = 0;
@@ -127,7 +127,7 @@ int SetPWM(int motor, int16 pwm) {
             }
             
             PWM1_value = pwm;
-            PWM_Motor1_WriteCompare(abs(pwm));
+            setPWMFromDutyCycle(1, abs(pwm));
         } else err = ERROR_PWM_NOT_ENABLED;
     }
     if (motor & MOTOR2) {
@@ -135,13 +135,13 @@ int SetPWM(int motor, int16 pwm) {
             PWM2_invalidate = 0;
             
             if (pwm < 0) {
-                Pin_Motor2_Dir_Write(BACKWARD);
+                Dir_Motor2_Write(BACKWARD);
                 if (pot_value <= 0) {
                     err = ERROR_LIMIT;
                     pwm = 0;
                 }
             } else if (pwm > 0) {
-                Pin_Motor2_Dir_Write(FORWARD);
+                Dir_Motor2_Write(FORWARD);
                 if (pot_value >= 4095) {
                     err = ERROR_LIMIT;
                     pwm = 0;
@@ -149,7 +149,7 @@ int SetPWM(int motor, int16 pwm) {
             }
             
             PWM2_value = pwm;
-            PWM_Motor2_WriteCompare(abs(pwm));
+            setPWMFromDutyCycle(2, abs(pwm));
 
         } else err = ERROR_PWM_NOT_ENABLED;
     }
@@ -158,13 +158,13 @@ int SetPWM(int motor, int16 pwm) {
             PWM3_invalidate = 0;
             
             if (pwm < 0) {
-                Pin_Motor3_Dir_Write(BACKWARD);
+                Dir_Motor3_Write(BACKWARD);
                 if (pot_value <= 0) {
                     err = ERROR_LIMIT;
                     pwm = 0;
                 }
             } else if (pwm > 0) {
-                Pin_Motor3_Dir_Write(FORWARD);
+                Dir_Motor3_Write(FORWARD);
                 if (pot_value >= 4095) {
                     err = ERROR_LIMIT;
                     pwm = 0;
@@ -172,7 +172,7 @@ int SetPWM(int motor, int16 pwm) {
             }
             
             PWM3_value = pwm;
-            PWM_Motor3_WriteCompare(abs(pwm));
+            setPWMFromDutyCycle(3, abs(pwm));
         } else err = ERROR_PWM_NOT_ENABLED;        
     }
     if (motor & MOTOR4) {
@@ -180,13 +180,13 @@ int SetPWM(int motor, int16 pwm) {
             PWM4_invalidate = 0;
             
             if (pwm < 0) {
-                Pin_Motor4_Dir_Write(BACKWARD);
+                Dir_Motor4_Write(BACKWARD);
                 if (pot_value <= 0) {
                     err = ERROR_LIMIT;
                     pwm = 0;
                 }
             } else if (pwm > 0) {
-                Pin_Motor4_Dir_Write(FORWARD);
+                Dir_Motor4_Write(FORWARD);
                 if (pot_value >= 4095) {
                     err = ERROR_LIMIT;
                     pwm = 0;
@@ -194,30 +194,8 @@ int SetPWM(int motor, int16 pwm) {
             }
             
             PWM4_value = pwm;
-            PWM_Motor4_WriteCompare(abs(pwm));
+            setPWMFromDutyCycle(4, abs(pwm));
 
-        } else err = ERROR_PWM_NOT_ENABLED;
-    }
-    if (motor & MOTOR5) {
-        if (PWM5_enable) {
-            PWM5_invalidate = 0;
-            
-            if (pwm < 0) {
-                Pin_Motor5_Dir_Write(BACKWARD);
-                if (pot_value <= 0) {
-                    err = ERROR_LIMIT;
-                    pwm = 0;
-                }
-            } else if (pwm > 0) {
-                Pin_Motor5_Dir_Write(FORWARD);
-                if (pot_value >= 4095) {
-                    err = ERROR_LIMIT;
-                    pwm = 0;
-                }
-            }
-            
-            PWM5_value = pwm;
-            PWM_Motor5_WriteCompare(abs(pwm));
         } else err = ERROR_PWM_NOT_ENABLED;
     }
     return err;
