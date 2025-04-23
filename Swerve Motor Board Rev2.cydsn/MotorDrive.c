@@ -408,6 +408,7 @@ void SetEncBound(uint8 lim_num, int32 value) {
 }
 
 CY_ISR(Drive_Handler) {
+    /*
     if (Pin_Limit1_Read() == 0) {
         if (limit1 == 0) {
             SetPWM(MOTOR1, 0);
@@ -425,7 +426,7 @@ CY_ISR(Drive_Handler) {
         }
         limit2 = 1;
     } else limit2 = 0;
-    
+    */
     if (PWM1_invalidate == 20) SetPWM(MOTOR1, 0);
     else PWM1_invalidate++;
     

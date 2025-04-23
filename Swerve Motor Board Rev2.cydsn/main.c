@@ -61,7 +61,7 @@ int main() {
 void Initialize(void) {
     CyGlobalIntEnable;
     
-    StartCAN(ReadDIP(), ReadDIP()+16);
+    //StartCAN(ReadDIP(), ReadDIP()+16);
     DBG_UART_Start();
     Timer_Periodic_Start();
     I2C_Start();
